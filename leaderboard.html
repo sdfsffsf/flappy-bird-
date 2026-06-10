@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Рекорды - Flappy Bird</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="logo">🐦 Flappy Bird</div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="game.html">Играть</a>
+                <a href="leaderboard.html" class="active">Рекорды</a>
+                <a href="how-to-play.html">Как играть</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <main class="main">
+            <section class="leaderboard-section">
+                <h1>🏆 Таблица рекордов</h1>
+
+                <div class="leaderboard-card">
+                    <div class="leaderboard-header">
+                        <span>#</span>
+                        <span>Дата</span>
+                        <span>Счёт</span>
+                    </div>
+                    <div id="leaderboard-list">
+                        <div class="empty-state">Пока нет рекордов. Сыграй первым!</div>
+                    </div>
+                </div>
+
+                <div class="stats-summary">
+                    <div class="summary-item">
+                        <span class="summary-icon">🎮</span>
+                        <span class="summary-value" id="total-games">0</span>
+                        <span class="summary-label">Всего игр</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-icon">⭐</span>
+                        <span class="summary-value" id="best-ever">0</span>
+                        <span class="summary-label">Лучший результат</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-icon">📊</span>
+                        <span class="summary-value" id="avg-score">0</span>
+                        <span class="summary-label">Средний счёт</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="game.html" class="btn btn-primary">🎮 Играть</a>
+                    <button class="btn btn-secondary" onclick="clearRecords()">🗑️ Очистить</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Flappy Bird © 2026</p>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        function loadLeaderboard() {
+            const records = JSON.parse(localStorage.getItem('flappyRecords') || '[]');
+            const list = document.getElementById('leaderboard-list');
+
+            if (records.length === 0) {
+                list.innerHTML = '<div class="empty-state">🎮 Пока нет рекордов. Сыграй первым!</div>';
+            } else {
+                list.innerHTML = records.slice().reverse().map((r, i) => `
+                    <div class="leaderboard-row ${i === 0 ? 'top' : ''}">
+                        <span class="rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1)}</span>
+                        <span class="date">${r.date}</span>
+                        <span class="score">${r.score}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Статистика
+            const stats = JSON.parse(localStorage.getItem('flappyStats') || '{"bestScore":0,"gamesPlayed":0,"totalPipes":0}');
+            document.getElementById('total-games').textContent = stats.gamesPlayed;
+            document.getElementById('best-ever').textContent = stats.bestScore;
+            document.getElementById('avg-score').textContent = stats.gamesPlayed > 0 
+                ? Math.round(stats.totalPipes / stats.gamesPlayed) : 0;
+        }
+
+        function clearRecords() {
+            if (confirm('Удалить все рекорды?')) {
+                localStorage.removeItem('flappyRecords');
+                localStorage.removeItem('flappyStats');
+                loadLeaderboard();
+            }
+        }
+
+        loadLeaderboard();
+    </script>
+</body>
+</html>

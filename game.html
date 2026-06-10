@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Играть - Flappy Bird</title>
+    <meta name="description" content="Играй в Flappy Bird прямо сейчас!">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .game-page { padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        #game-wrapper {
+            position: relative;
+            max-width: 100%;
+            width: 400px;
+        }
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 2/3;
+            background: linear-gradient(to bottom, #70c5ce 0%, #70c5ce 80%, #ded895 80%, #ded895 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            touch-action: none;
+        }
+        #game-container canvas { width: 100%; height: 100%; display: block; }
+
+        /* Экран ввода кода */
+        #login-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 100; transition: opacity 0.5s;
+        }
+        #login-screen.hidden { opacity: 0; pointer-events: none; }
+        #login-screen h2 { color: #fff; font-size: 24px; margin-bottom: 20px; }
+        #login-screen input {
+            width: 180px; padding: 15px; font-size: 28px; text-align: center;
+            border: 2px solid #4ecdc4; border-radius: 10px;
+            background: rgba(255,255,255,0.1); color: #fff; outline: none;
+            letter-spacing: 10px;
+        }
+        #login-screen input:focus { border-color: #ff6b6b; }
+        #login-screen button {
+            margin-top: 15px; padding: 12px 35px; font-size: 18px;
+            border: none; border-radius: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: #fff; cursor: pointer;
+        }
+        #login-error { color: #ff6b6b; margin-top: 10px; font-size: 14px; opacity: 0; }
+        #login-error.show { opacity: 1; }
+
+        /* Счёт */
+        #score {
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            font-size: 42px; font-weight: bold; color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4); z-index: 10; pointer-events: none;
+        }
+
+        /* Подсказка */
+        #start-hint {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #fff; font-size: 18px; text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); z-index: 10; pointer-events: none;
+            animation: pulse 1.5s infinite; padding: 0 20px;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+        /* Game Over */
+        #game-over {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            z-index: 50;
+        }
+        #game-over.show { display: flex; }
+        #game-over h1 { color: #ff6b6b; font-size: 36px; margin-bottom: 5px; }
+        #game-over .score-display { color: #fff; font-size: 20px; margin-bottom: 20px; }
+        #game-over .new-record { color: #feca57; font-size: 18px; margin-bottom: 15px; display: none; }
+        #game-over .new-record.show { display: block; }
+        #game-over button {
+            padding: 12px 35px; font-size: 16px; border: none; border-radius: 25px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d); color: #fff;
+            cursor: pointer; margin: 5px;
+        }
+
+        /* Мобильные кнопки */
+        .mobile-controls {
+            display: none; margin-top: 15px; gap: 10px;
+        }
+        .mobile-btn {
+            padding: 15px 40px; font-size: 20px; border: none; border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57); color: #fff;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            user-select: none; -webkit-user-select: none;
+        }
+        .mobile-btn:active { transform: scale(0.95); }
+
+        @media (max-width: 500px) {
+            .mobile-controls { display: flex; }
+            #game-container { border-radius: 0; }
+            .game-page { padding: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="logo">🐦 Flappy Bird</div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="game.html" class="active">Играть</a>
+                <a href="leaderboard.html">Рекорды</a>
+                <a href="how-to-play.html">Как играть</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <main class="main game-page">
+            <div id="game-wrapper">
+                <div id="game-container">
+                    <div id="login-screen">
+                        <h2>🔐 Введите код</h2>
+                        <input type="password" id="code-input" maxlength="3" placeholder="•••" inputmode="numeric" pattern="[0-9]*">
+                        <button onclick="checkCode()">Войти</button>
+                        <div id="login-error">Неверный код! Попробуйте 123</div>
+                    </div>
+
+                    <div id="score">0</div>
+                    <div id="start-hint">Нажмите Пробел или коснитесь экрана</div>
+
+                    <div id="game-over">
+                        <h1>GAME OVER</h1>
+                        <div class="score-display">Счёт: <span id="final-score">0</span></div>
+                        <div class="new-record" id="new-record">🏆 Новый рекорд!</div>
+                        <button onclick="resetGame()">🔄 Снова</button>
+                        <button onclick="location.href='leaderboard.html'">📊 Рекорды</button>
+                    </div>
+
+                    <canvas id="canvas" width="400" height="600"></canvas>
+                </div>
+            </div>
+
+            <div class="mobile-controls">
+                <button class="mobile-btn" id="jump-btn" ontouchstart="event.preventDefault(); jump();">👆 Прыгнуть</button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Flappy Bird © 2026</p>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

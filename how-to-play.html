@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Как играть - Flappy Bird</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="logo">🐦 Flappy Bird</div>
+            <nav class="nav">
+                <a href="index.html">Главная</a>
+                <a href="game.html">Играть</a>
+                <a href="leaderboard.html">Рекорды</a>
+                <a href="how-to-play.html" class="active">Как играть</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <main class="main">
+            <section class="howto-section">
+                <h1>📖 Как играть</h1>
+
+                <div class="howto-card">
+                    <div class="howto-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>🔐 Войди в игру</h3>
+                            <p>На странице игры введи код <strong>123</strong> и нажми «Войти»</p>
+                        </div>
+                    </div>
+
+                    <div class="howto-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>👆 Управляй птицей</h3>
+                            <p>• <strong>На ПК:</strong> нажимай <kbd>Пробел</kbd> или кликай мышью<br>
+                               • <strong>На телефоне:</strong> касайся экрана или нажимай кнопку</p>
+                        </div>
+                    </div>
+
+                    <div class="howto-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>🎯 Проходи трубы</h3>
+                            <p>Пролетай между зелёными трубами. Не касайся их — иначе игра закончится!</p>
+                        </div>
+                    </div>
+
+                    <div class="howto-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>🏆 Бей рекорды</h3>
+                            <p>Каждая пройденная труба = 1 очко. Соревнуйся в таблице рекордов!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <h2>💡 Советы</h2>
+                    <ul>
+                        <li>Не жми слишком часто — найди ритм</li>
+                        <li>Следи за верхней трубой, а не нижней</li>
+                        <li>Короткие нажатия лучше длинных</li>
+                        <li>Не нервничай — это всего лишь игра 😄</li>
+                    </ul>
+                </div>
+
+                <a href="game.html" class="btn btn-primary">🎮 Начать игру</a>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Flappy Bird © 2026</p>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+</body>
+</html>

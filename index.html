@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flappy Bird - Классическая игра</title>
+    <meta name="description" content="Играй в классическую Flappy Bird бесплатно прямо в браузере!">
+    <meta property="og:title" content="Flappy Bird - Классическая игра">
+    <meta property="og:description" content="Проверь свои рефлексы в легендарной игре!">
+    <meta property="og:image" content="images/preview.jpg">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="logo">🐦 Flappy Bird</div>
+            <nav class="nav">
+                <a href="index.html" class="active">Главная</a>
+                <a href="game.html">Играть</a>
+                <a href="leaderboard.html">Рекорды</a>
+                <a href="how-to-play.html">Как играть</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </header>
+
+        <main class="main">
+            <section class="hero">
+                <div class="hero-bird">🐦</div>
+                <h1>Flappy Bird</h1>
+                <p class="hero-subtitle">Классическая аркада, которая покорила мир</p>
+                <a href="game.html" class="btn btn-primary">🎮 Начать игру</a>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>На любом устройстве</h3>
+                    <p>Играй на телефоне, планшете или компьютере</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Таблица рекордов</h3>
+                    <p>Соревнуйся с друзьями за лучший результат</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Без установки</h3>
+                    <p>Запускай прямо в браузере — ничего скачивать не нужно</p>
+                </div>
+            </section>
+
+            <section class="stats-section">
+                <h2>📊 Твоя статистика</h2>
+                <div class="stats-grid" id="home-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="best-score">0</span>
+                        <span class="stat-label">Лучший счёт</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="games-played">0</span>
+                        <span class="stat-label">Игр сыграно</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-pipes">0</span>
+                        <span class="stat-label">Труб пройдено</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Flappy Bird © 2026 | Сделано с ❤️</p>
+        </footer>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // Загрузка статистики на главной
+        const stats = JSON.parse(localStorage.getItem('flappyStats') || '{"bestScore":0,"gamesPlayed":0,"totalPipes":0}');
+        document.getElementById('best-score').textContent = stats.bestScore;
+        document.getElementById('games-played').textContent = stats.gamesPlayed;
+        document.getElementById('total-pipes').textContent = stats.totalPipes;
+    </script>
+</body>
+</html>
